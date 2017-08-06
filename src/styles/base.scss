@@ -1,5 +1,2 @@
-$jade-purple: #00A86B;
-
-#app {
-  background-color: $jade-purple;
-}
+@import "~bootstrap-sass/assets/stylesheets/bootstrap-sprockets";
+@import '~bootstrap-sass/assets/stylesheets/bootstrap';

@@ -2,6 +2,7 @@
   <div id="app">
     <img src="./assets/logo.png">
     <router-view></router-view>
+    <button class="btn btn-default">Submit</button>
   </div>
 </template>
 
