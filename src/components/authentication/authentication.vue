@@ -1,6 +1,6 @@
 <template>
   <div class="authentication-page">
-    <div class="logo">Logo</div>
+    <div class="logo"></div>
     <div class="panel panel-default">
       <div class="panel-body">
         <form class="sign-in" v-if="signIn">
@@ -76,6 +76,11 @@
     flex-direction: column;
     .logo{
       margin-bottom: 20px;
+      height: 150px;
+      width: 150px;
+      background-image: url('./../../assets/my-forum.png');
+      background-size: contain;
+      background-repeat: no-repeat;
     }
     .panel {
       @media all and (min-width: $medium-width) {
