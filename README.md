@@ -1,5 +1,7 @@
 # my-forum
 
+[![Build Status](https://travis-ci.org/adetola-ralph/my-forum-fe.svg?branch=master)](https://travis-ci.org/adetola-ralph/my-forum-fe)
+
 > A Vue.js project
 
 ## Build Setup
