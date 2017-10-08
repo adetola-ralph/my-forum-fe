@@ -6,34 +6,39 @@
         <form class="sign-in" v-if="signIn">
           <div class="form-group">
             <label for="email" class="ccontrol-label">Email:</label>
-            <input type="email" class="form-control" id="email" placeholder="Email">
+            <input type="email" class="form-control" id="email" placeholder="Email" v-model="signInObject.email">
           </div>
           <div class="form-group">
             <label for="password" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
+            <input type="password" class="form-control" id="password" placeholder="Password" v-model="signInObject.password">
           </div>
-          <button class="btn btn-default">Login</button>
+          <div class="form-group">
+            <div class="error" v-if="ifError">
+              {{errorMessage}}
+            </div>
+          </div>
+          <button class="btn btn-default" @click.prevent="login()">Login</button>
         </form>
         <form class="sign-up" v-if="!signIn">
           <div class="form-group">
             <label for="firstname" class="control-label">Firstname</label>
-            <input type="text" class="form-control" id="firstname" placeholder="Firstname">
+            <input type="text" class="form-control" id="firstname" placeholder="Firstname" v-model="signUpbject.firstname">
           </div>
           <div class="form-group">
             <label for="surname" class="control-label">Surname</label>
-            <input type="text" class="form-control" id="surname" placeholder="Surname">
+            <input type="text" class="form-control" id="surname" placeholder="Surname" v-model="signUpbject.surname">
           </div>
           <div class="form-group">
             <label for="signup-email" class="control-label">Email</label>
-            <input type="email" class="form-control" id="signup-email" placeholder="Email">
+            <input type="email" class="form-control" id="signup-email" placeholder="Email" v-model="signUpbject.email">
           </div>
           <div class="form-group">
             <label for="signup-password" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="signup-password" placeholder="Password">
+            <input type="password" class="form-control" id="signup-password" placeholder="Password" v-model="signUpbject.password">
           </div>
           <div class="form-group">
             <label for="confirm-password" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password">
+            <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password" v-model="signUpbject.confirmPassword">
           </div>
           <button class="btn btn-default">Register</button>
         </form>
@@ -48,16 +53,45 @@
   </div>
 </template>
 <script>
+  import Authentication from './../../utilities/auth';
+
   export default {
     name: 'authentication',
     data() {
       return {
+        errorMessage: '',
+        ifError: false,
         signIn: true,
+        signInObject: {
+          email: '',
+          password: '',
+        },
+        signUpbject: {
+          firstname: '',
+          surname: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+        },
       };
     },
     methods: {
       changeAuth() {
         this.signIn = !this.signIn;
+      },
+      login() {
+        Authentication.login(this.signInObject)
+        .then((result) => {
+          const token = result.data.data.token;
+          this.$cookies.set('token', token, '3D');
+          this.$cookies.set('authenticated', true);
+          this.$router.push({ name: 'Home' });
+        })
+        .catch((err) => {
+          const response = err.response;
+          this.errorMessage = response.data.message;
+          this.ifError = true;
+        });
       },
     },
   };
