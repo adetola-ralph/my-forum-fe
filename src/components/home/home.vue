@@ -29,6 +29,18 @@
 <script>
   export default {
     name: 'home',
+    data() {
+      return {
+        authenticated: false,
+      };
+    },
+    beforeRouteEnter(to, from, next) {
+      next((vm) => {
+        if (!(vm.$cookies.get('authenticated') && vm.$cookies.get('token'))) {
+          next('auth');
+        }
+      });
+    },
   };
 </script>
 <style lang="scss">
