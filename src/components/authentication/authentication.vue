@@ -6,14 +6,34 @@
         <form class="sign-in" v-if="signIn">
           <div class="form-group">
             <label for="email" class="ccontrol-label">Email:</label>
-            <input type="email" class="form-control" id="email" placeholder="Email" v-model="signInObject.email">
+            <input type="email" 
+                   class="form-control" 
+                   id="email" 
+                   placeholder="Email"
+                   name="signinEmail"
+                   data-vv-as="email"
+                   v-validate="'required|email'"
+                   v-model="signInObject.email">
+            <p class="text-danger" v-if="errors.has('signinEmail')">
+              {{ errors.first('signinEmail') }}
+            </p>
           </div>
           <div class="form-group">
             <label for="password" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="password" placeholder="Password" v-model="signInObject.password">
+            <input type="password" 
+                   class="form-control" 
+                   id="password" 
+                   placeholder="Password"
+                   name="signinPassword"
+                   data-vv-as="password"
+                   v-validate="'required'"
+                   v-model="signInObject.password">
+            <p class="text-danger" v-if="errors.has('signinPassword')">
+              {{ errors.first('signinPassword') }}
+            </p>
           </div>
           <div class="form-group">
-            <div class="error" v-if="ifError">
+            <div class="text-danger" v-if="ifError">
               {{errorMessage}}
             </div>
           </div>
@@ -80,19 +100,30 @@
         this.signIn = !this.signIn;
       },
       login() {
-        Authentication.login(this.signInObject)
-        .then((result) => {
-          const token = result.data.data.token;
-          this.$cookies.set('token', token, '3D');
-          this.$cookies.set('authenticated', true);
-          this.$router.push({ name: 'Home' });
-        })
-        .catch((err) => {
-          const response = err.response;
-          this.errorMessage = response.data.message;
-          this.ifError = true;
-        });
+        this.ifError = false;
+        this.$validator.validateAll();
+
+        if (!this.errors.any()) {
+          Authentication.login(this.signInObject)
+          .then((result) => {
+            const token = result.data.data.token;
+            this.$cookies.set('token', token, '3D');
+            this.$cookies.set('authenticated', true);
+            this.$router.push({ name: 'Home' });
+          })
+          .catch((err) => {
+            const response = err.response;
+            this.errorMessage = response.data.message;
+            this.ifError = true;
+          });
+        }
       },
+    },
+    beforeRouteEnter(to, from, next) {
+      next((vm) => {
+        vm.$cookies.remove('token');
+        vm.$cookies.set('authenticated', false);
+      });
     },
   };
 </script>
