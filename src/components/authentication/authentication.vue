@@ -3,7 +3,7 @@
     <div class="logo"></div>
     <div class="panel panel-default">
       <div class="panel-body">
-        <form class="sign-in" v-if="signIn">
+        <form class="sign-in" v-if="signIn" data-vv-scope="login">
           <div class="form-group">
             <label for="email" class="ccontrol-label">Email:</label>
             <input type="email" 
@@ -14,8 +14,8 @@
                    data-vv-as="email"
                    v-validate="'required|email'"
                    v-model="signInObject.email">
-            <p class="text-danger" v-if="errors.has('signinEmail')">
-              {{ errors.first('signinEmail') }}
+            <p class="text-danger" v-if="errors.has('login.signinEmail')">
+              {{ errors.first('login.signinEmail') }}
             </p>
           </div>
           <div class="form-group">
@@ -28,8 +28,8 @@
                    data-vv-as="password"
                    v-validate="'required'"
                    v-model="signInObject.password">
-            <p class="text-danger" v-if="errors.has('signinPassword')">
-              {{ errors.first('signinPassword') }}
+            <p class="text-danger" v-if="errors.has('login.signinPassword')">
+              {{ errors.first('login.signinPassword') }}
             </p>
           </div>
           <div class="form-group">
@@ -59,6 +59,11 @@
           <div class="form-group">
             <label for="confirm-password" class="control-label">Password:</label>
             <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password" v-model="signUpbject.confirmPassword">
+          </div>
+          <div class="form-group">
+            <div class="text-danger" v-if="ifError">
+              {{errorMessage}}
+            </div>
           </div>
           <button class="btn btn-default">Register</button>
         </form>
@@ -101,22 +106,25 @@
       },
       login() {
         this.ifError = false;
-        this.$validator.validateAll();
+        this.$validator.validateAll('login').then((result) => {
+          if (result) {
+            Authentication.login(this.signInObject)
+            .then((res) => {
+              const token = res.data.data.token;
+              this.$cookies.set('token', token, '3D');
+              this.$cookies.set('authenticated', true);
+              this.$router.push({ name: 'Home' });
+            })
+            .catch((err) => {
+              const response = err.response;
+              this.errorMessage = response.data.message;
+              this.ifError = true;
+            });
+          }
+        });
+      },
+      signup() {
 
-        if (!this.errors.any()) {
-          Authentication.login(this.signInObject)
-          .then((result) => {
-            const token = result.data.data.token;
-            this.$cookies.set('token', token, '3D');
-            this.$cookies.set('authenticated', true);
-            this.$router.push({ name: 'Home' });
-          })
-          .catch((err) => {
-            const response = err.response;
-            this.errorMessage = response.data.message;
-            this.ifError = true;
-          });
-        }
       },
     },
     beforeRouteEnter(to, from, next) {
