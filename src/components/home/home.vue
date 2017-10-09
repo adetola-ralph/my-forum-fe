@@ -16,7 +16,7 @@
           </a>
           <ul class="dropdown-menu">
             <li><a href>Profile</a></li>
-            <li><a href>Logout</a></li>
+            <li><a href @click.prevent="logout()">Logout</a></li>
           </ul>
         </li>
       </ul>
@@ -31,8 +31,19 @@
     name: 'home',
     data() {
       return {
-        authenticated: false,
       };
+    },
+    methods: {
+      logout() {
+        this.$cookies.remove('token');
+        this.$cookies.set('authenticated', false);
+        this.$router.push({ name: 'Auth' });
+      },
+    },
+    computed: {
+      authenticated() {
+        return this.$cookies.get('authenticated');
+      },
     },
     beforeRouteEnter(to, from, next) {
       next((vm) => {
