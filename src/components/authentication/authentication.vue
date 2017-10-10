@@ -49,7 +49,7 @@
                    name="firstName"
                    data-vv-as="first name"
                    v-validate="'required'"
-                   v-model="signUpbject.firstname">
+                   v-model="signUpObject.firstname">
             <p class="text-danger" v-if="errors.has('signup.firstName')">
               {{ errors.first('signup.firstName') }}
             </p>
@@ -62,7 +62,7 @@
                    placeholder="Surname"
                    name="surname"
                    v-validate="'required'"
-                   v-model="signUpbject.surname">
+                   v-model="signUpObject.surname">
             <p class="text-danger" v-if="errors.has('signup.surname')">
               {{ errors.first('signup.surname') }}
             </p>
@@ -76,7 +76,7 @@
                    name="signupEmail"
                    data-vv-as="email"
                    v-validate="'required|email'"
-                   v-model="signUpbject.email">
+                   v-model="signUpObject.email">
             <p class="text-danger" v-if="errors.has('signup.signupEmail')">
               {{ errors.first('signup.signupEmail') }}
             </p>
@@ -90,7 +90,7 @@
                    name="signupPassword"
                    data-vv-as="password"
                    v-validate="'required'"
-                   v-model="signUpbject.password">
+                   v-model="signUpObject.password">
             <p class="text-danger" v-if="errors.has('signup.signupPassword')">
               {{ errors.first('signup.signupPassword') }}
             </p>
@@ -104,7 +104,7 @@
                    name="confirmPassword"
                    data-vv-as="confirm password"
                    v-validate="'required|confirmed:signupPassword'"
-                   v-model="signUpbject.confirmPassword">
+                   v-model="signUpObject.confirmPassword">
             <p class="text-danger" v-if="errors.has('signup.confirmPassword')">
               {{ errors.first('signup.confirmPassword') }}
             </p>
@@ -119,15 +119,15 @@
       </div>
     </div>
     <div v-if="!signIn">
-      Have an Account, Sign in <a href @click.prevent = "changeAuth()">here</a>
+      Have an Account, Sign in <a class="switch-form-signin" href @click.prevent = "changeAuth()">here</a>
     </div>
     <div v-if="signIn">
-      Don't have an Account, Sign up <a href @click.prevent = "changeAuth()">here</a>
+      Don't have an Account, Sign up <a class="switch-form-signup" href @click.prevent = "changeAuth()">here</a>
     </div>
   </div>
 </template>
 <script>
-  import Authentication from './../../utilities/auth';
+  import Auth from './../../utilities/auth';
 
   export default {
     name: 'authentication',
@@ -140,7 +140,7 @@
           email: '',
           password: '',
         },
-        signUpbject: {
+        signUpObject: {
           firstname: '',
           surname: '',
           email: '',
@@ -157,7 +157,7 @@
         this.ifError = false;
         this.$validator.validateAll('login').then((result) => {
           if (result) {
-            Authentication.login(this.signInObject)
+            Auth.login(this.signInObject)
             .then((res) => {
               const token = res.data.data.token;
               this.$cookies.set('token', token, '3D');
@@ -176,8 +176,8 @@
         this.ifError = false;
         this.$validator.validateAll('signup').then((result) => {
           if (result) {
-            this.signUpbject.name = `${this.signUpbject.firstname} ${this.signUpbject.surname}`;
-            Authentication.signup(this.signUpbject)
+            this.signUpObject.name = `${this.signUpObject.firstname} ${this.signUpObject.surname}`;
+            Auth.signup(this.signUpObject)
             .then((res) => {
               const token = res.data.data.token;
               this.$cookies.set('token', token, '3D');
