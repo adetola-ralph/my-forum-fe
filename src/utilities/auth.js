@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default class Authentication {
+export default class Auth {
   constructor() {
     this.login = this.login.bind(this);
   }
