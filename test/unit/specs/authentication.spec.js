@@ -1,39 +1,42 @@
-import Vue from 'vue';
+// import Vue from 'vue';
 import VueValidate from 'vee-validate';
-import { mount } from 'vue-test-utils';
+import VueRouter from 'vue-router';
+import { mount, createLocalVue } from 'vue-test-utils';
 import Authentication from '@/components/authentication/authentication';
 import Auth from '@/utilities/auth';
 
 let wrapper;
-let data;
+let vm;
 let sandbox;
+const Vue = createLocalVue();
+const router = new VueRouter();
 
 describe('Authentication.vue', () => {
   before(() => {
     Vue.use(VueValidate);
-    wrapper = mount(Authentication);
-    data = wrapper.vm;
+    wrapper = mount(Authentication, { localVue: Vue, router });
+    vm = wrapper.vm;
   });
 
   it('should have signin object', () => {
-    expect(data.signInObject).to.be.an('object');
+    expect(vm.signInObject).to.be.an('object');
   });
 
   it('should have signup object', () => {
-    expect(data.signUpObject).to.be.an('object');
+    expect(vm.signUpObject).to.be.an('object');
   });
 
   it('expect signin option to be true', () => {
-    expect(data.signIn).to.equal(true);
+    expect(vm.signIn).to.equal(true);
   });
 
   it('expect ifError option to be false', () => {
-    expect(data.ifError).to.equal(false);
+    expect(vm.ifError).to.equal(false);
   });
 
   it('expect errorMessage to be empty string', () => {
     expect(wrapper.vm.errorMessage).to.be.a('string');
-    expect(data.errorMessage).to.be.equal('');
+    expect(vm.errorMessage).to.be.equal('');
   });
 
   it('should have the signin form visible', () => {
@@ -79,7 +82,7 @@ describe('Authentication.vue', () => {
 
     it('should fail on invalid email', (done) => {
       const signinButton = wrapper.find('form.sign-in button');
-      data.signInObject = {
+      vm.signInObject = {
         email: 'random string',
         password: 'password',
       };
@@ -94,8 +97,10 @@ describe('Authentication.vue', () => {
     describe('backend requests', () => {
       let loginStub;
       let validateAllStub;
+      let routerPushSpy;
       before(() => {
         sandbox = sinon.sandbox.create();
+        routerPushSpy = sandbox.spy(vm.$router, 'push');
         loginStub = sandbox.stub(Auth, 'login');
         loginStub.withArgs({
           email: 'good@email.ng',
@@ -133,7 +138,7 @@ describe('Authentication.vue', () => {
 
       it('should call login method of Auth class for login', (done) => {
         const signinButton = wrapper.find('form.sign-in button');
-        data.signInObject = {
+        vm.signInObject = {
           email: 'good@email.ng',
           password: 'password',
         };
@@ -141,14 +146,14 @@ describe('Authentication.vue', () => {
         Vue.nextTick().then(() => {
           // eslint-disable-next-line
           expect(Auth.login).to.be.called;
-          expect(Auth.login).to.be.calledWith(data.signInObject);
+          expect(Auth.login).to.be.calledWith(vm.signInObject);
           done();
         }).catch(err => done(err));
       });
 
       it('should show error message if login fails', (done) => {
         const signinButton = wrapper.find('form.sign-in button');
-        data.signInObject = {
+        vm.signInObject = {
           email: 'bad@email.ng',
           password: 'password',
         };
@@ -159,8 +164,8 @@ describe('Authentication.vue', () => {
             password: 'password',
           }).catch((err) => {
             const response = err.response;
-            data.errorMessage = response.data.message;
-            data.ifError = true;
+            vm.errorMessage = response.data.message;
+            vm.ifError = true;
             Vue.nextTick().then(() => {
               const errorMessage = wrapper.findAll('.error-message').at(0);
               expect(errorMessage.text().trim()).to.equal('Authentication failed: Invalid user');
@@ -193,7 +198,7 @@ describe('Authentication.vue', () => {
 
     it('should fail if confirm password isn\'t same as password', (done) => {
       const signupButton = wrapper.find('form.sign-up button');
-      data.signUpObject = {
+      vm.signUpObject = {
         firstname: 'xf',
         surname: 'xn',
         email: 'xgood@email.ng',
@@ -256,7 +261,7 @@ describe('Authentication.vue', () => {
 
       it('should call signup method of Auth class for signup', (done) => {
         const signupButton = wrapper.find('form.sign-up button');
-        data.signUpObject = {
+        vm.signUpObject = {
           firstname: 'xf',
           surname: 'xn',
           email: 'xgood@email.ng',
@@ -267,14 +272,14 @@ describe('Authentication.vue', () => {
         Vue.nextTick().then(() => {
           // eslint-disable-next-line
           expect(Auth.signup).to.be.called;
-          expect(Auth.signup).to.be.calledWith(data.signUpObject);
+          expect(Auth.signup).to.be.calledWith(vm.signUpObject);
           done();
         }).catch(err => done(err));
       });
 
       it('should show error message if signup fails', (done) => {
         const signupButton = wrapper.find('form.sign-up button');
-        data.signInObject = {
+        vm.signInObject = {
           email: 'bad@email.ng',
           password: 'password',
         };
@@ -288,8 +293,8 @@ describe('Authentication.vue', () => {
             confirmPassword: 'xpassword',
           }).catch((err) => {
             const response = err.response;
-            data.errorMessage = response.data.message;
-            data.ifError = true;
+            vm.errorMessage = response.data.message;
+            vm.ifError = true;
             Vue.nextTick().then(() => {
               const errorMessage = wrapper.findAll('.error-message').at(0);
               expect(errorMessage.text().trim()).to.equal('Signup failed: Duplicate user');
