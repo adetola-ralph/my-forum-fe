@@ -33,7 +33,7 @@
             </p>
           </div>
           <div class="form-group">
-            <div class="text-danger" v-if="ifError">
+            <div class="text-danger error-message" v-if="ifError">
               {{errorMessage}}
             </div>
           </div>
@@ -110,7 +110,7 @@
             </p>
           </div>
           <div class="form-group">
-            <div class="text-danger" v-if="ifError">
+            <div class="text-danger error-message" v-if="ifError">
               {{errorMessage}}
             </div>
           </div>
