@@ -1,6 +1,6 @@
 # my-forum
-
-[![Build Status](https://travis-ci.org/adetola-ralph/my-forum-fe.svg?branch=master)](https://travis-ci.org/adetola-ralph/my-forum-fe)
+[ ![Codeship Status for adetola-ralph/my-forum-fe](https://app.codeship.com/projects/a9ca4060-9030-0135-db97-6e0944fe810d/status?branch=develop)](https://app.codeship.com/projects/250160)
+[![Coverage Status](https://coveralls.io/repos/github/adetola-ralph/my-forum-fe/badge.svg?branch=develop)](https://coveralls.io/github/adetola-ralph/my-forum-fe?branch=develop)
 
 > A Vue.js project
 
