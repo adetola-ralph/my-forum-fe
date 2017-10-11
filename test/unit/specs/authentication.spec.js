@@ -97,10 +97,8 @@ describe('Authentication.vue', () => {
     describe('backend requests', () => {
       let loginStub;
       let validateAllStub;
-      let routerPushSpy;
       before(() => {
         sandbox = sinon.sandbox.create();
-        routerPushSpy = sandbox.spy(vm.$router, 'push');
         loginStub = sandbox.stub(Auth, 'login');
         loginStub.withArgs({
           email: 'good@email.ng',
