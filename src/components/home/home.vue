@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">
@@ -21,18 +21,19 @@
         </li>
       </ul>
     </nav>
-    <div class="main-content">
-      <router-view></router-view>
+    <div class="row content">
+      <div class="main-content col-md-9">
+        <router-view></router-view>
+      </div>
+      <div class="sidebar col-md-3">
+        side-bar
+      </div>
     </div>
   </div>
 </template>
 <script>
   export default {
     name: 'home',
-    data() {
-      return {
-      };
-    },
     methods: {
       logout() {
         this.$cookies.remove('token');
@@ -59,6 +60,8 @@
     height: 60px;
     padding-left: 10px;
     padding-right: 10px;
+    background-color: #fff;
+
     .navbar-brand {
       padding: 5px 5px 5px 0;
       .logo{
@@ -100,7 +103,18 @@
       margin-right: 0;
     }
   }
-  .main-content {
-    margin-top: 60px;
+
+  .content {
+    margin-top:60px;
+    background-color: #f8f8f8;
+    min-height: 100vh;
+
+    .main-content {
+      // margin-top: 60px;
+      padding:30px;
+    }
+    .sidebar {
+      // margin-top: 60px;
+    }
   }
 </style>
