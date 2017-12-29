@@ -25,7 +25,7 @@ describe('Topic utility class', () => {
     sandBox = sinon.sandbox.create();
     axiosstub = sandBox.stub(axios, 'get');
 
-    axiosstub.withArgs(`${link}/topics`).returns(Promise.resolve(expectedResult));
+    axiosstub.withArgs(`${link}/topics?include=users`).returns(Promise.resolve(expectedResult));
   });
 
   after(() => {
@@ -38,7 +38,7 @@ describe('Topic utility class', () => {
 
   it('should call axios get', (done) => {
     Topics.getAll();
-    expect(axios.get).to.be.calledWith(`${link}/topics`);
+    expect(axios.get).to.be.calledWith(`${link}/topics?include=users`);
     done();
   });
 

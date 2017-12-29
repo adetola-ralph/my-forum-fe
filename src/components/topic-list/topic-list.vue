@@ -13,7 +13,7 @@
         </ul>
       </span>
       <span class="topic-info">
-        by {{topic.userId}} at {{topic.createdAt}}
+        by {{topic.author}} at {{topic.createdAt}}
       </span>
     </div>
   </div>
@@ -35,9 +35,10 @@ export default {
       return Topics.getAll().then((res) => {
         const topics = res.data.data;
         this.topics = topics.map((topic) => {
-          const modfiedTopic = Object.assign({}, topic);
-          modfiedTopic.createdAt = moment(topic.createdAt).format('ll');
-          return modfiedTopic;
+          const modifiedTopic = Object.assign({}, topic);
+          modifiedTopic.createdAt = moment(topic.createdAt).format('ll');
+          modifiedTopic.author = topic.User.name;
+          return modifiedTopic;
         });
       });
     },
