@@ -19,12 +19,18 @@ const data = {
         topicName: 'topicName',
         userId: 1,
         createdAt: new Date(2017, 11, 30),
+        User: {
+          name: 'Firstname Surname',
+        },
       },
       {
         id: 2,
         topicName: 'topicName2',
         userId: 1,
         createdAt: new Date(2017, 12, 1),
+        User: {
+          name: 'Firstname Surname',
+        },
       },
     ],
   },
@@ -63,12 +69,13 @@ describe('TopicList.vue', () => {
     expect(vm).to.have.property('topics');
   });
 
-  it('', (done) => {
+  it('getTopics method', (done) => {
     vm.getTopics();
     vm.$nextTick().then(() => {
       expect(vm.topics[0].id).to.equal(1);
       expect(vm.topics[0].createdAt).to.equal(moment(data.data.data[0].createdAt)
         .format('ll'));
+      expect(vm.topics[0].author).to.equal('Firstname Surname');
       done();
     });
   });
