@@ -61,6 +61,7 @@
     padding-left: 10px;
     padding-right: 10px;
     background-color: #fff;
+    border-bottom: 0;
 
     .navbar-brand {
       padding: 5px 5px 5px 0;
@@ -106,7 +107,7 @@
 
   .content {
     margin-top:60px;
-    background-color: #f8f8f8;
+    background-color: #f1f3f5;
     min-height: 100vh;
 
     .main-content {
