@@ -62,21 +62,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'src/styles/base.scss';
   .topic-list {
-    color: #797979;
-    padding: 20px 20px 10px;
-    // border-radius: 4px;
-    border: #f1f3f5 1px solid;
-    position: relative;
-    // box-shadow: 0 0 8px 0 rgba(0,0,0,.06), 0 1px 0 0 rgba(0,0,0,.02);
-    background-color: #fff;
-    height: 100px;
-    border-bottom: 0;
-
-    &:first-child {
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
-    }
+    @extend .lists;
 
     &:last-child {
       border-bottom-left-radius: 5px;
@@ -85,14 +73,11 @@ export default {
     }
 
     .topic-list-heading {
-      font-size: 19px;
-      font-weight: bold;
-      margin-bottom: 18px;
-      box-sizing: border-box;
-      color: #1c2024;
-    }
+      @extend.lists-heading;
+      cursor: pointer;
+      transition: color 0.2s;
 
-    .author {
+      &:hover {
       color: darken(#85FFBD, 40%);
 
       &-image {
