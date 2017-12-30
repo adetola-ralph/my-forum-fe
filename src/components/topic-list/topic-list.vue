@@ -5,7 +5,7 @@
     </div>
     <div>
       <div class="topic-list" v-for="topic in topics" :key="topic.id">
-        <p class="topic-list-heading">{{topic.topicName}}</p>
+        <p class="topic-list-heading" @click="goToTopic(topic)">{{topic.topicName}}</p>
         <div class="topic-meta">
           <span class="topic-info">
             <a class="author">
@@ -54,6 +54,11 @@ export default {
       // eslint-disable-next-line
       return topic.User.profilePicture || require('./../../assets/icons/user-solid-circle.svg');
     },
+    goToTopic(topic) {
+      this.$router.push({
+        path: `/topics/${topic.id}/`,
+      });
+    },
   },
   mounted() {
     this.getTopics();
@@ -66,24 +71,13 @@ export default {
   .topic-list {
     @extend .lists;
 
-    &:last-child {
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-      border-bottom: #f1f3f5 1px solid;
-    }
-
     .topic-list-heading {
       @extend.lists-heading;
       cursor: pointer;
       transition: color 0.2s;
 
       &:hover {
-      color: darken(#85FFBD, 40%);
-
-      &-image {
-        max-width: 17px;
-        border-radius: 50%;
-        vertical-align: sub;
+        color: darken(#85FFBD, 40%);
       }
     }
 
@@ -107,14 +101,6 @@ export default {
           background-color: darken(#85FFBD, 1%);
         }
       }
-
-    }
-
-    .topic-info {
-      color: #636f7b;
-      font-weight: 400;
-      font-size: 12px;
-
     }
   }
 </style>
