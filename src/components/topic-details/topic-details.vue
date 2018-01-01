@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     getTopicAndPosts() {
-      Topics.getOne(this.topicId).then(([rTopic, rPosts]) => {
+      return Topics.getOne(this.topicId).then(([rTopic, rPosts]) => {
         const topic = rTopic.data.data;
         const posts = rPosts.data.data;
 
@@ -49,10 +49,10 @@ export default {
           return modifiedPost;
         });
 
-        this.topic = Object.assign({
+        this.topic = Object.assign(topic, {
           createdAt: moment(topic.createdAt).format('ll'),
           author: topic.User.name,
-        }, topic);
+        });
       });
     },
     getUserAvatar(post) {
