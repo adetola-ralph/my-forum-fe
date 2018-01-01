@@ -80,6 +80,7 @@ describe('Topic utility class', () => {
 
   it('should call axios get', (done) => {
     Topics.getOne();
+    // eslint-disable-next-line
     expect(axios.get).to.have.been.called;
     done();
   });

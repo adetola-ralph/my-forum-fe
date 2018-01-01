@@ -110,6 +110,7 @@ describe('TopicDetails.vue', () => {
       },
     };
     expect(vm.getUserAvatar(post)).to.equal('profile picture');
+    // eslint-disable-next-line
     expect(vm.getUserAvatar({ User: {} })).to.not.be.empty;
     expect(vm.getUserAvatar({ User: {} })).to.be.a('string');
   });

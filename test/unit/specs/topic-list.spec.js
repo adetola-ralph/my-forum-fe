@@ -7,10 +7,10 @@ import Topic from '@/utilities/topics';
 let wrapper;
 let vm;
 let sandbox;
-// let getTopicsStub;
 let getAllTopicStub;
 const Vue = createLocalVue();
 const router = new VueRouter();
+// Vue.use(VueRouter);
 const data = {
   data: {
     data: [
@@ -61,7 +61,6 @@ describe('TopicList.vue', () => {
         getTopics: () => 'test',
       },
     });
-    // expect(vm.getTopics).to.have.been.called();
     expect(shallowMount.vm.getTopics()).to.equal('test');
   });
 
@@ -77,6 +76,23 @@ describe('TopicList.vue', () => {
         .format('ll'));
       expect(vm.topics[0].author).to.equal('Firstname Surname');
       done();
+    });
+  });
+
+  it('clicking on a topic redirects to the topic page', (done) => {
+    sandbox.spy(vm, 'goToTopic');
+    sandbox.spy(vm.$router, 'push');
+
+    const firstTopic = wrapper.findAll('.topic-list-heading').at(0);
+    firstTopic.trigger('click');
+    vm.$nextTick().then(() => {
+      // eslint-disable-next-line
+      expect(vm.goToTopic).to.be.called;
+      // eslint-disable-next-line
+      expect(vm.$router.push).to.be.called;
+      done();
+    }).catch((err) => {
+      done(err);
     });
   });
 });
