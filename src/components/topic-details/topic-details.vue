@@ -3,7 +3,7 @@
     <div class="page-header">
       <h1>{{topic.topicName}}</h1>
     </div>
-    <div>
+    <div v-if="posts.length > 0">
       <div class="lists" v-for="post in posts" :key="post.id">
         <p class="lists-heading">{{post.content}}</p>
         <div class="meta">
@@ -16,6 +16,9 @@
           </span>
         </div>
       </div>
+    </div>
+    <div class="no-content" v-if="posts.length === 0">
+      No Posts under this topic.
     </div>
   </div>
 </template>
