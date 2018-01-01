@@ -5,7 +5,7 @@
     </div>
     <div>
       <div class="topic-list" v-for="topic in topics" :key="topic.id">
-        <p class="topic-list-heading">{{topic.topicName}}</p>
+        <p class="topic-list-heading" @click="goToTopic(topic)">{{topic.topicName}}</p>
         <div class="topic-meta">
           <span class="topic-info">
             <a class="author">
@@ -54,6 +54,11 @@ export default {
       // eslint-disable-next-line
       return topic.User.profilePicture || require('./../../assets/icons/user-solid-circle.svg');
     },
+    goToTopic(topic) {
+      this.$router.push({
+        path: `/topics/${topic.id}/`,
+      });
+    },
   },
   mounted() {
     this.getTopics();
@@ -62,43 +67,17 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'src/styles/base.scss';
   .topic-list {
-    color: #797979;
-    padding: 20px 20px 10px;
-    // border-radius: 4px;
-    border: #f1f3f5 1px solid;
-    position: relative;
-    // box-shadow: 0 0 8px 0 rgba(0,0,0,.06), 0 1px 0 0 rgba(0,0,0,.02);
-    background-color: #fff;
-    height: 100px;
-    border-bottom: 0;
-
-    &:first-child {
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
-    }
-
-    &:last-child {
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-      border-bottom: #f1f3f5 1px solid;
-    }
+    @extend .lists;
 
     .topic-list-heading {
-      font-size: 19px;
-      font-weight: bold;
-      margin-bottom: 18px;
-      box-sizing: border-box;
-      color: #1c2024;
-    }
+      @extend.lists-heading;
+      cursor: pointer;
+      transition: color 0.2s;
 
-    .author {
-      color: darken(#85FFBD, 40%);
-
-      &-image {
-        max-width: 17px;
-        border-radius: 50%;
-        vertical-align: sub;
+      &:hover {
+        color: darken(#85FFBD, 40%);
       }
     }
 
@@ -122,14 +101,6 @@ export default {
           background-color: darken(#85FFBD, 1%);
         }
       }
-
-    }
-
-    .topic-info {
-      color: #636f7b;
-      font-weight: 400;
-      font-size: 12px;
-
     }
   }
 </style>
