@@ -3,8 +3,8 @@
     <div class="page-header">
       <h1>{{topic.topicName}}</h1>
     </div>
-    <div v-if="posts.length > 0">
-      <div class="lists" v-for="post in posts" :key="post.id">
+    <div>
+      <div class="lists" v-for="post in posts" :key="post.id" v-if="posts.length > 0">
         <p class="lists-heading">{{post.content}}</p>
         <div class="meta">
           <span class="info">
@@ -16,15 +16,32 @@
           </span>
         </div>
       </div>
-    </div>
-    <div class="no-content" v-if="posts.length === 0">
-      No Posts under this topic.
+      <div class="no-content lists" v-if="posts.length === 0">
+        No Posts under this topic.
+      </div>
+      <div class="lists new-post">
+        <form data-vv-scope="newPost">
+          <div class="form-group">
+            <textarea name="newPost" 
+              id="new-post" 
+              class="form-control"
+              v-validate="'required'"
+              data-vv-as="New Post"
+              v-model="newPost"></textarea>
+              <p class="text-danger" v-if="errors.has('newPost.newPost')">
+                Please enter content in the field above
+              </p>
+          </div>
+          <button type="submit" class="btn btn-primary" @click.prevent="createNewPost()">Post</button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
+import Posts from './../../utilities/posts';
 import Topics from './../../utilities/topics';
 
 export default {
@@ -34,9 +51,14 @@ export default {
     return {
       topic: {},
       posts: [],
+      newPost: '',
+      userId: this.getUserId(),
     };
   },
   methods: {
+    getUserId() {
+      return this.$cookies.get('userId');
+    },
     getTopicAndPosts() {
       return Topics.getOne(this.topicId).then(([rTopic, rPosts]) => {
         const topic = rTopic.data.data;
@@ -58,6 +80,24 @@ export default {
     getUserAvatar(post) {
       // eslint-disable-next-line
       return post.User.profilePicture || require('./../../assets/icons/user-solid-circle.svg');
+    },
+    createNewPost() {
+      this.$validator.validateAll('newPost').then((result) => {
+        if (result) {
+          const payload = {
+            content: this.newPost,
+            topicId: this.topic.id,
+            userId: this.userId,
+          };
+
+          Posts.newPost(payload).then(() => {
+            this.getTopicAndPosts();
+            this.newPost = '';
+          }).catch((err) => {
+            console.log(err);
+          });
+        }
+      });
     },
   },
   mounted() {

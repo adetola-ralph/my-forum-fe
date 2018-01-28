@@ -24,7 +24,8 @@ $base-yellow: #FFFB7D;
   border: #f1f3f5 1px solid;
   position: relative;
   background-color: #fff;
-  height: 100px;
+  min-height: 100px;
+  height: auto;
   border-bottom: 0;
 
   &:first-child {
