@@ -38,6 +38,7 @@
       logout() {
         this.$cookies.remove('token');
         this.$cookies.set('authenticated', false);
+        this.$cookies.remove('userId');
         this.$router.push({ name: 'Auth' });
       },
     },

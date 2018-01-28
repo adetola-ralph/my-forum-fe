@@ -160,7 +160,9 @@
             Auth.login(this.signInObject)
             .then((res) => {
               const token = res.data.data.token;
+              const userId = res.data.data.userId;
               this.$cookies.set('token', token, '3D');
+              this.$cookies.set('userId', userId);
               this.$cookies.set('authenticated', true);
               this.$router.push({ name: 'Home' });
             })
@@ -180,7 +182,9 @@
             Auth.signup(this.signUpObject)
             .then((res) => {
               const token = res.data.data.token;
+              const userId = res.data.data.id;
               this.$cookies.set('token', token, '3D');
+              this.$cookies.set('userId', userId);
               this.$cookies.set('authenticated', true);
               this.$router.push({ name: 'Home' });
             })
