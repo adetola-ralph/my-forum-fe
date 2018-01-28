@@ -25,6 +25,7 @@
 
 <script>
 import moment from 'moment';
+import Posts from './../../utilities/posts';
 import Topics from './../../utilities/topics';
 
 export default {

@@ -1,11 +1,45 @@
 import axios from 'axios';
 
+const axiosInstance = axios.create();
+
 export default (() => {
-  const get = url => axios.get(url);
+  const getAuthorization = () => {
+    const cookies = document.cookie.split('; ').reduce((agg, value) => {
+      const arrayValue = value.split('=');
+      const key = arrayValue[0];
+      // eslint-disable-next-line
+      agg[key] = arrayValue[1];
+      return agg;
+    }, {});
 
-  const post = (url, data) => axios.post(url, data);
+    return cookies.token;
+  };
 
-  const put = (url, data) => axios.put(url, data);
+  const addAuthInformation = (auth = false) => {
+    if (auth) {
+      axiosInstance.interceptors.request.use((request) => {
+        request.headers = {
+          authorization: `Bearer ${getAuthorization()}`,
+        };
+        return request;
+      });
+    }
+  };
+
+  const get = (url, auth = false) => {
+    addAuthInformation(auth);
+    return axiosInstance.get(url);
+  };
+
+  const post = (url, data, auth = false) => {
+    addAuthInformation(auth);
+    return axiosInstance.post(url, data);
+  };
+
+  const put = (url, data, auth = false) => {
+    addAuthInformation(auth);
+    return axiosInstance.put(url, data);
+  };
 
   return {
     get,
