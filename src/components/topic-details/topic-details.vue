@@ -18,7 +18,7 @@
       </div>
       <div class="no-content lists" v-if="posts.length === 0">
         No Posts under this topic.
-    </div>
+      </div>
       <div class="lists new-post">
         <form data-vv-scope="newPost">
           <div class="form-group">
@@ -51,9 +51,14 @@ export default {
     return {
       topic: {},
       posts: [],
+      newPost: '',
+      userId: this.getUserId(),
     };
   },
   methods: {
+    getUserId() {
+      return this.$cookies.get('userId');
+    },
     getTopicAndPosts() {
       return Topics.getOne(this.topicId).then(([rTopic, rPosts]) => {
         const topic = rTopic.data.data;
@@ -75,6 +80,24 @@ export default {
     getUserAvatar(post) {
       // eslint-disable-next-line
       return post.User.profilePicture || require('./../../assets/icons/user-solid-circle.svg');
+    },
+    createNewPost() {
+      this.$validator.validateAll('newPost').then((result) => {
+        if (result) {
+          const payload = {
+            content: this.newPost,
+            topicId: this.topic.id,
+            userId: this.userId,
+          };
+
+          Posts.newPost(payload).then(() => {
+            this.getTopicAndPosts();
+            this.newPost = '';
+          }).catch((err) => {
+            console.log(err);
+          });
+        }
+      });
     },
   },
   mounted() {

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import moment from 'moment';
 import TopicDetails from '@/components/topic-details/topic-details';
 import Topics from '@/utilities/topics';
+import VueValidate from 'vee-validate';
 
 let wrapper;
 let vm;
@@ -58,11 +59,19 @@ describe('TopicDetails.vue', () => {
   });
 
   before(() => {
+    Vue.use(VueValidate);
     wrapper = mount(TopicDetails, {
       localVue: Vue,
       router,
       propsData: {
         topicId: 2,
+      },
+      mocks: {
+        $cookies: {
+          get(value) {
+            return value;
+          },
+        },
       },
     });
     vm = wrapper.vm;
